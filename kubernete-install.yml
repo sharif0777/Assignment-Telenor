@@ -1,0 +1,9 @@
+---
+- name: Kubernetes cluster Deployment And Configure .....  
+  hosts: kubernete
+  sudo: yes
+  remote_user: ubuntu
+  
+  roles:
+   - kubernete
+   

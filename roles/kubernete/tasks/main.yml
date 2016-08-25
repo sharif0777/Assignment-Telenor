@@ -1,0 +1,36 @@
+---
+ - apt: update_cache=yes
+ - apt: upgrade=dist
+
+ - name: ssh, curl, Docker.io install
+   apt: name={{ item }} state=present
+   with_items: 
+    - ssh
+    - curl
+    - docker.io
+
+ - name: create a pub key 
+   shell: echo "y" | ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
+
+ #- name: Copy the ssh id_rsa key locally
+ #  shell: sudo ssh-copy-id -o BatchMode=yes -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.pub 127.0.0.1
+
+ - name: In case this command fails please use this alternative solution
+   shell: sudo cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+
+ - name: Download kubernetes
+   shell: rm -rf kubernetes.tar.gz && rm -rf kubernetes && sudo wget https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz
+
+ - name: Untar kubernetes
+   shell: sudo tar -xvf kubernetes.tar.gz && cd /home/ubuntu/kubernetes/cluster/ubuntu && ./build.sh
+
+ - name: Setting 
+   shell: sudo cp -rf /home/ubuntu/kubernetes/cluster/ubuntu/binaries/* /usr/bin/ && sudo rm -rf /home/ubuntu/kubernetes/cluster/ubuntu/config-default.sh
+
+ - name: copy kubernetes configure 
+   copy: src=config-default.sh dest=/home/ubuntu/kubernetes/cluster/ubuntu/config-default.sh mode=0755
+
+ - name: KUBERNETES System Startup
+   shell: cd /home/ubuntu/kubernetes/cluster && sudo KUBERNETES_PROVIDER=ubuntu ./kube-up.sh
+ - name: wordpress image inpute in Docker and run with KUBERNETES
+   shell: kubectl run wordpress --image=tutum/wordpress --port=80 --hostport=81

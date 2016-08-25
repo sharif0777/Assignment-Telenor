@@ -1,0 +1,49 @@
+---
+- hosts: laradock
+  sudo: yes
+
+
+  tasks: 
+   
+   - apt: update_cache=yes
+   - apt: upgrade=dist
+
+   - name: git, ssh, curl, Docker.io install
+     apt: name={{ item }} state=present
+     with_items: 
+       - git
+       - ssh
+       - curl
+       - docker.io
+       - python-pip 
+       - python-dev
+       - build-essential
+
+   - name: laradock Git Clone
+     git: repo=https://github.com/LaraDock/laradock.git  dest=/home/ubuntu/laradock version=master
+   
+   - name: install docker-compose
+     shell: pip install -U docker-compose
+   - shell: chmod +x /usr/local/bin/docker-compose
+   
+
+   - shell: sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+   - shell: echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" | sudo tee /etc/apt/sources.list.d/docker.list
+   - shell: apt-get update
+
+   - name: docker-engine install
+     apt: name={{ item }} state=present
+     with_items: 
+       - docker
+       - docker-engine
+
+   - shell: apt-get install docker-engine && sudo service docker restart 
+   - shell: curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+   - shell: chmod +x /usr/local/bin/docker-compose
+   - shell: curl -L https://github.com/docker/machine/releases/download/v0.7.0/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine && chmod +x /usr/local/bin/docker-machine
+
+   - shell: cd /home/ubuntu/laradock/ && docker-compose stop
+   #- shell: cd /home/ubuntu/laradock/ && docker rm $(docker ps -a -q)
+   - shell: cd /home/ubuntu/laradock/ && docker-compose up -d nginx
+
+    

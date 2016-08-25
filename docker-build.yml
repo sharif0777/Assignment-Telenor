@@ -1,0 +1,11 @@
+---
+ 
+ - name: Docker Deployment And Configure .....   
+   hosts: laradock
+   sudo: yes
+   remote_user: ubuntu
+   
+   roles:
+     - web
+
+
