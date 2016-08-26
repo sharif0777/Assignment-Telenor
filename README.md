@@ -1,5 +1,5 @@
 
-# Assignment-Telenor 3
+# Assignment-Telenor
 change to hosts for Deployment
 
 
