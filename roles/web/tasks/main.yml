@@ -30,7 +30,7 @@
  #- name:  all docker container remove 
  # shell: cd /home/ubuntu/laradock/ && docker rm $(docker ps -a -q)
  
- - name: docker-compose container stop
+ - name: docker-compose container up
    shell: cd /home/ubuntu/laradock/ && docker-compose up -d nginx
    
  - name:  laradock_nginx run 
