@@ -1,17 +1,20 @@
 ---
- - shell: sudo rm -rf /home/ubuntu/laradock
+ 
+ - name: remove laradock 
+   shell: sudo rm -rf /home/ubuntu/laradock
+   
  - name: laradock Git Clone
    git: repo=https://github.com/LaraDock/laradock.git  dest=/home/ubuntu/laradock version=master
    
-# - name: Copy wordpress File . . . 
-#   copy: src=wordpress.tar.gz dest=/home/ubuntu/laradock/nginx/www/wordpress.tar.gz
-
-# - name: wordpress untar.
-#   sudo: yes
-#   shell: cd /home/ubuntu/laradock/nginx/www/ && tar xvf wordpress.tar.gz && chown root:root wordpress -R
- - shell: rm -rf /home/ubuntu/laradock/nginx/Dockerfile
- - shell: rm -rf /home/ubuntu/laradock/docker-compose.yml
- - shell: rm -rf /home/ubuntu/laradock/nginx/www/index.html
+ - name: Remove Dockerfile
+   shell: rm -rf /home/ubuntu/laradock/nginx/Dockerfile
+   
+ - name: Remove docker-compose
+   shell: rm -rf /home/ubuntu/laradock/docker-compose.yml
+   
+ - name: Remove index.html
+   shell: rm -rf /home/ubuntu/laradock/nginx/www/index.html
+   
  - name: Copy Dockerfile File . . . 
    copy: src=Dockerfile dest=/home/ubuntu/laradock/nginx/Dockerfile
 
@@ -21,9 +24,14 @@
  - name: Copy Index page File . . . 
    copy: src=index.html dest=/home/ubuntu/laradock/nginx/www/ owner=root
 
- - shell: sudo rm -rf /home/ubuntu/laradock/nginx/www/wordpress.tar.gz
-
- - shell: cd /home/ubuntu/laradock/ && docker-compose stop
- #- shell: cd /home/ubuntu/laradock/ && docker rm $(docker ps -a -q)
- - shell: cd /home/ubuntu/laradock/ && docker-compose up -d nginx
- - shell: kubectl run laradock --image=laradock_nginx --port=80 --hostport=81 && kubectl get pods
+ - name: docker-compose container stop
+   shell: cd /home/ubuntu/laradock/ && docker-compose stop
+   
+ #- name:  all docker container remove 
+ # shell: cd /home/ubuntu/laradock/ && docker rm $(docker ps -a -q)
+ 
+ - name: docker-compose container stop
+   shell: cd /home/ubuntu/laradock/ && docker-compose up -d nginx
+   
+ - name:  laradock_nginx run 
+   shell: kubectl run laradock --image=laradock_nginx --port=80 --hostport=81 && kubectl get pods

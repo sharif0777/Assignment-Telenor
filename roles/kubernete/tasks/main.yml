@@ -1,5 +1,7 @@
 ---
- - apt: update_cache=yes
+ - name: repo update 
+   apt: update_cache=yes
+   
  - apt: upgrade=dist
 
  - name: ssh, curl, Docker.io install
@@ -32,5 +34,6 @@
 
  - name: KUBERNETES System Startup
    shell: cd /home/ubuntu/kubernetes/cluster && sudo KUBERNETES_PROVIDER=ubuntu ./kube-up.sh
+   
  - name: wordpress image inpute in Docker and run with KUBERNETES
    shell: kubectl run wordpress --image=tutum/wordpress --port=80 --hostport=81
