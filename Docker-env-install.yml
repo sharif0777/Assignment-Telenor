@@ -19,9 +19,6 @@
        - python-dev
        - build-essential
 
-   - name: laradock Git Clone
-     git: repo=https://github.com/LaraDock/laradock.git  dest=/home/ubuntu/laradock version=master
-   
    - name: install docker-compose
      shell: pip install -U docker-compose
      
